@@ -1,0 +1,5 @@
+# Sẽ chốt phiên bản cụ thể ở mốc E1
+torch
+torchvision
+numpy
+matplotlib
