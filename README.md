@@ -32,11 +32,22 @@
 
 ## Môi trường
 
-*(Sẽ bổ sung khi làm E1: phiên bản Python, PyTorch, cách cài đặt.)*
+- Python 3.10+ và PyTorch (ghi lại phiên bản thực tế sau khi chạy: `python -c "import torch, torchvision; print(torch.__version__, torchvision.__version__)"`).
+- Cài thư viện: `pip install -r requirements.txt`
+- Dataset: Fashion-MNIST (tải tự động bằng torchvision vào `data/`). Chia train/val = 54.000/6.000 bằng seed 42, test = 10.000 ảnh gốc; chỉ số chia lưu trong `splits/`.
 
 ## Lệnh chạy
 
-*(Sẽ bổ sung khi hoàn thành E1, E2, E3.)*
+Chạy tất cả từ thư mục gốc của repo.
+
+**E1** (Softmax / MLP / CNN):
+```bash
+python E1/smoke_test.py                 # kiểm thử nhanh bằng dữ liệu giả (không dùng cho báo cáo)
+python E1/run_e1.py --dataset fashion_mnist --epochs 15
+```
+Kết quả (log, config, bảng, biểu đồ, checkpoint) nằm trong `results/E1/`.
+
+*(E2, E3: sẽ bổ sung.)*
 
 ## Ghi nhận việc sử dụng công cụ AI
 
