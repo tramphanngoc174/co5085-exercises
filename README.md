@@ -9,9 +9,9 @@
 
 | Hạng mục | Hạn (23:59 GMT+7) | Trạng thái | Tag |
 |---|---|---|---|
-| GitHub Pages (khung trang) | 19/10/2026 | Đang thực hiện | `pages-w7` |
+| GitHub Pages (khung trang) | 19/10/2026 | Hoàn thành | `pages-w7` |
 | E1 – Softmax / MLP / CNN | 02/11/2026 | Đã có kết quả và báo cáo | `submit-e1` |
-| E2 – MSA + tokenization | 02/11/2026 | Chưa thực hiện | `submit-e1-e2` |
+| E2 – MSA + tokenization | 02/11/2026 | Chưa thực hiện | `submit-e2` |
 | E3 – LSTM / GRU | 09/11/2026 | Chưa thực hiện | `submit-e3` |
 
 ## Cấu trúc thư mục
@@ -49,7 +49,14 @@ Kết quả (log, config, bảng, biểu đồ, checkpoint) nằm trong `results
 
 Dựng lại báo cáo PDF từ số liệu E1: `pip install reportlab pillow` rồi `python reports/source/build_report.py`.
 
-*(E2, E3: sẽ bổ sung.)*
+**E2** (MSA tự viết vs PyTorch, 3 cách tokenize):
+```bash
+python E2/smoke_test.py                 # kiểm thử MSA, hình dạng tensor, pipeline bằng dữ liệu giả
+python E2/run_e2.py --dataset fashion_mnist --epochs 10
+```
+Kết quả nằm trong `results/E2/`.
+
+*(E3: sẽ bổ sung.)*
 
 ## Ghi nhận việc sử dụng công cụ AI
 
