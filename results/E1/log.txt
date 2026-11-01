@@ -1,0 +1,63 @@
+
+===== softmax =====
+số tham số: 7,850
+epoch 01/15 | train loss 0.5712 acc 0.8031 | val loss 0.4851 acc 0.8303 | 12.4s
+epoch 02/15 | train loss 0.4486 acc 0.8441 | val loss 0.4580 acc 0.8410 | 12.4s
+epoch 03/15 | train loss 0.4279 acc 0.8517 | val loss 0.4492 acc 0.8453 | 12.6s
+epoch 04/15 | train loss 0.4209 acc 0.8535 | val loss 0.4514 acc 0.8438 | 12.3s
+epoch 05/15 | train loss 0.4097 acc 0.8584 | val loss 0.4480 acc 0.8402 | 12.4s
+epoch 06/15 | train loss 0.4040 acc 0.8601 | val loss 0.4510 acc 0.8378 | 12.7s
+epoch 07/15 | train loss 0.3986 acc 0.8615 | val loss 0.4504 acc 0.8432 | 12.4s
+epoch 08/15 | train loss 0.3964 acc 0.8610 | val loss 0.4636 acc 0.8387 | 12.5s
+epoch 09/15 | train loss 0.3928 acc 0.8626 | val loss 0.4487 acc 0.8442 | 12.4s
+epoch 10/15 | train loss 0.3914 acc 0.8637 | val loss 0.4390 acc 0.8438 | 12.3s
+epoch 11/15 | train loss 0.3872 acc 0.8647 | val loss 0.4401 acc 0.8467 | 12.4s
+epoch 12/15 | train loss 0.3867 acc 0.8661 | val loss 0.4816 acc 0.8320 | 12.4s
+epoch 13/15 | train loss 0.3838 acc 0.8657 | val loss 0.4527 acc 0.8423 | 12.5s
+epoch 14/15 | train loss 0.3831 acc 0.8662 | val loss 0.4471 acc 0.8462 | 12.4s
+epoch 15/15 | train loss 0.3840 acc 0.8660 | val loss 0.4403 acc 0.8498 | 12.4s
+best epoch 15 | val acc 0.8498 | test acc 0.8442 | test loss 0.4445
+
+===== mlp =====
+số tham số: 535,818
+epoch 01/15 | train loss 0.4716 acc 0.8293 | val loss 0.3896 acc 0.8563 | 12.8s
+epoch 02/15 | train loss 0.3450 acc 0.8724 | val loss 0.3689 acc 0.8615 | 12.7s
+epoch 03/15 | train loss 0.3054 acc 0.8871 | val loss 0.3307 acc 0.8747 | 12.6s
+epoch 04/15 | train loss 0.2790 acc 0.8956 | val loss 0.3274 acc 0.8790 | 12.7s
+epoch 05/15 | train loss 0.2591 acc 0.9036 | val loss 0.3204 acc 0.8852 | 12.8s
+epoch 06/15 | train loss 0.2417 acc 0.9087 | val loss 0.3257 acc 0.8832 | 12.8s
+epoch 07/15 | train loss 0.2281 acc 0.9142 | val loss 0.3262 acc 0.8892 | 12.9s
+epoch 08/15 | train loss 0.2142 acc 0.9192 | val loss 0.3318 acc 0.8808 | 12.8s
+epoch 09/15 | train loss 0.2013 acc 0.9237 | val loss 0.3421 acc 0.8883 | 12.8s
+epoch 10/15 | train loss 0.1894 acc 0.9271 | val loss 0.3305 acc 0.8940 | 12.8s
+epoch 11/15 | train loss 0.1794 acc 0.9320 | val loss 0.3366 acc 0.8932 | 12.6s
+epoch 12/15 | train loss 0.1658 acc 0.9373 | val loss 0.3468 acc 0.8983 | 13.0s
+epoch 13/15 | train loss 0.1577 acc 0.9394 | val loss 0.3656 acc 0.8908 | 12.8s
+epoch 14/15 | train loss 0.1509 acc 0.9432 | val loss 0.3445 acc 0.8973 | 12.9s
+epoch 15/15 | train loss 0.1419 acc 0.9452 | val loss 0.3820 acc 0.8940 | 12.9s
+best epoch 12 | val acc 0.8983 | test acc 0.8896 | test loss 0.3662
+
+===== cnn =====
+số tham số: 421,834
+epoch 01/15 | train loss 0.4542 acc 0.8376 | val loss 0.2997 acc 0.8875 | 15.4s
+epoch 02/15 | train loss 0.3018 acc 0.8919 | val loss 0.2854 acc 0.8935 | 14.6s
+epoch 03/15 | train loss 0.2618 acc 0.9036 | val loss 0.2473 acc 0.9130 | 14.6s
+epoch 04/15 | train loss 0.2323 acc 0.9140 | val loss 0.2331 acc 0.9162 | 14.3s
+epoch 05/15 | train loss 0.2122 acc 0.9212 | val loss 0.2398 acc 0.9138 | 14.5s
+epoch 06/15 | train loss 0.2007 acc 0.9264 | val loss 0.2402 acc 0.9100 | 14.5s
+epoch 07/15 | train loss 0.1823 acc 0.9334 | val loss 0.2270 acc 0.9217 | 14.6s
+epoch 08/15 | train loss 0.1667 acc 0.9387 | val loss 0.2321 acc 0.9187 | 15.1s
+epoch 09/15 | train loss 0.1563 acc 0.9413 | val loss 0.2315 acc 0.9197 | 14.5s
+epoch 10/15 | train loss 0.1425 acc 0.9471 | val loss 0.2249 acc 0.9212 | 14.4s
+epoch 11/15 | train loss 0.1323 acc 0.9496 | val loss 0.2297 acc 0.9225 | 14.4s
+epoch 12/15 | train loss 0.1241 acc 0.9537 | val loss 0.2634 acc 0.9143 | 14.4s
+epoch 13/15 | train loss 0.1140 acc 0.9572 | val loss 0.2255 acc 0.9292 | 14.4s
+epoch 14/15 | train loss 0.1043 acc 0.9604 | val loss 0.2249 acc 0.9253 | 14.7s
+epoch 15/15 | train loss 0.0976 acc 0.9636 | val loss 0.2412 acc 0.9280 | 15.0s
+best epoch 13 | val acc 0.9292 | test acc 0.9244 | test loss 0.2365
+
+| Mô hình | Tham số | Best epoch | Val acc | Test acc | s/epoch |
+|---|---|---|---|---|---|
+| softmax | 7,850 | 15 | 0.8498 | 0.8442 | 12.4 |
+| mlp | 535,818 | 12 | 0.8983 | 0.8896 | 12.8 |
+| cnn | 421,834 | 13 | 0.9292 | 0.9244 | 14.6 |

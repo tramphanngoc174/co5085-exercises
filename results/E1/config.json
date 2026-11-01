@@ -1,0 +1,16 @@
+{
+  "dataset": "fashion_mnist",
+  "models": [
+    "softmax",
+    "mlp",
+    "cnn"
+  ],
+  "epochs": 15,
+  "lr": 0.001,
+  "batch_size": 128,
+  "seed": 42,
+  "val_size": 6000,
+  "data_root": "data",
+  "out": "results/E1",
+  "device": "cuda"
+}
