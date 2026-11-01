@@ -60,11 +60,14 @@ def run_all(train_loader, val_loader, test_loader, info, args, device):
         plot_confusion(cm, info["class_names"], f"Confusion matrix – {name} (test)",
                        os.path.join(mdir, "confusion_matrix.png"))
         wrong = (y_true != y_pred).nonzero().squeeze(1)[:12]
-        imgs = torch.stack([test_loader.dataset[i][0] for i in wrong.tolist()])
-        # (ảnh đã chuẩn hóa nên màu hơi khác ảnh gốc, chỉ để minh họa lỗi)
-        plot_errors(imgs, y_true[wrong].tolist(), y_pred[wrong].tolist(),
-                    info["class_names"], f"Mẫu dự đoán sai – {name}",
-                    os.path.join(mdir, "errors.png"))
+        if len(wrong) > 0:
+            imgs = torch.stack([test_loader.dataset[i][0] for i in wrong.tolist()])
+            # (ảnh đã chuẩn hóa nên màu hơi khác ảnh gốc, chỉ để minh họa lỗi)
+            plot_errors(imgs, y_true[wrong].tolist(), y_pred[wrong].tolist(),
+                        info["class_names"], f"Mẫu dự đoán sai – {name}",
+                        os.path.join(mdir, "errors.png"))
+        else:
+            log("Không có mẫu dự đoán sai, bỏ qua errors.png")
 
         mean_t = sum(hist["epoch_time"]) / len(hist["epoch_time"])
         rows.append({"model": name, "params": n_params, "best_epoch": hist["best_epoch"],
