@@ -10,7 +10,7 @@
 | Hạng mục | Hạn (23:59 GMT+7) | Trạng thái | Tag |
 |---|---|---|---|
 | GitHub Pages (khung trang) | 19/10/2026 | Đang thực hiện | `pages-w7` |
-| E1 – Softmax / MLP / CNN | 02/11/2026 | Chưa thực hiện | `submit-e1-e2` |
+| E1 – Softmax / MLP / CNN | 02/11/2026 | Đã có kết quả và báo cáo | `submit-e1` |
 | E2 – MSA + tokenization | 02/11/2026 | Chưa thực hiện | `submit-e1-e2` |
 | E3 – LSTM / GRU | 09/11/2026 | Chưa thực hiện | `submit-e3` |
 
@@ -47,8 +47,10 @@ python E1/run_e1.py --dataset fashion_mnist --epochs 15
 ```
 Kết quả (log, config, bảng, biểu đồ, checkpoint) nằm trong `results/E1/`.
 
+Dựng lại báo cáo PDF từ số liệu E1: `pip install reportlab pillow` rồi `python reports/source/build_report.py`.
+
 *(E2, E3: sẽ bổ sung.)*
 
 ## Ghi nhận việc sử dụng công cụ AI
 
-Công cụ AI (Claude) được dùng để hỗ trợ phân tích đề, lập kế hoạch, gợi ý cấu trúc dự án và soạn các tệp khung (README, trang GitHub Pages). *(Sẽ cập nhật chi tiết ở các mốc E1–E3.)* Sinh viên tự chịu trách nhiệm về nội dung nộp và có thể giải thích code cũng như số liệu.
+Công cụ AI (Claude, Anthropic) được dùng để hỗ trợ: phân tích đề và lập kế hoạch; soạn khung mã nguồn E1 (`common/`, `E1/`), tệp khung README, trang GitHub Pages; soạn bản nháp báo cáo từ số liệu thật do sinh viên cung cấp. Sinh viên chạy thí nghiệm trên Google Colab và chịu trách nhiệm kiểm tra, giải thích mã nguồn và số liệu. *(Sẽ cập nhật ở các mốc E2, E3.)*
