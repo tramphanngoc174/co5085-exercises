@@ -76,7 +76,7 @@ def front():
         Spacer(1, 6),
         table([["Bài", "Hạn nộp", "Trạng thái trong bản báo cáo này"],
                ["E1 – Softmax / MLP / CNN", "02/11/2026", "Đã có kết quả (mục 1)"],
-               ["E2 – MSA + tokenization", "02/11/2026", "Chưa có trong bản này (mục 2)"],
+               ["E2 – MSA + tokenization", "02/11/2026", "Đã có kết quả (mục 2)"],
                ["E3 – LSTM / GRU", "09/11/2026", "Chưa có trong bản này (mục 3)"]],
               [170, 80, 245]),
         P("Báo cáo này là một file PDF chung, được cập nhật dần theo từng hạn nộp.", "p"),
@@ -192,23 +192,107 @@ def section_e1():
         "CNN có thêm BatchNorm và Dropout còn MLP thì không, nên phần chênh lệch giữa hai mô hình không chỉ do convolution."])
     return out
 
+def section_e2():
+    out = [P("2. E2 – Transformer: MSA và tokenization", "h1")]
+
+    out += [P("2.1 Thiết lập chung", "h2")] + bullets([
+        "Bộ phân loại: Tokenizer → 2 khối encoder [LayerNorm → MSA → cộng tắt, LayerNorm → FFN → cộng tắt] → LayerNorm → Linear 10 trên token CLS. "
+        "Kích thước ẩn 64, 4 head, FFN có hệ số mở rộng 2 (GELU). Mọi tokenizer đều thêm token CLS và positional embedding học được.",
+        "Dữ liệu, split, seed 42 và vòng lặp huấn luyện tự viết giống E1; Adam, learning rate 0,001, batch 128, loss Cross-Entropy, "
+        "chọn epoch theo validation accuracy. Khác E1: <b>10 epoch</b> (thay vì 15) để tiết kiệm thời gian chạy.",
+        "Có 3 cách tokenize × 2 bản MSA = 6 lần huấn luyện, mỗi lần một seed. Các lần chạy dùng chung cấu hình (xem <font name='VN'>results/E2/config.json</font>)."])
+
+    out += [P("2.2 MSA tự viết và MSA PyTorch", "h2"),
+        P("<b>MSA tự viết</b> (<font name='VN'>E2/msa.py</font>, lớp <font name='VN'>CustomMSA</font>) chỉ dùng Linear, nhân ma trận, softmax và ghép head: "
+          "ba lớp Linear tạo Q, K, V; tách thành 4 head (mỗi head 16 chiều); điểm chú ý = Q·Kᵀ chia căn bậc hai của 16; softmax theo chiều token; "
+          "nhân với V; ghép các head lại và qua một lớp Linear đầu ra. Bản này không dùng <font name='VN'>nn.MultiheadAttention</font> hay "
+          "<font name='VN'>nn.TransformerEncoder</font>. <b>MSA PyTorch</b> là <font name='VN'>nn.MultiheadAttention</font> (<font name='VN'>TorchMSA</font>) với cùng giao diện."),
+        P("<b>Kiểm tra tính đúng:</b> chép trọng số của bản tự viết sang bản PyTorch rồi so đầu ra trên một batch ngẫu nhiên (3 mẫu × 10 token × 64 chiều). "
+          "Sai khác tuyệt đối lớn nhất là <b>1,19×10⁻⁷</b> (ngưỡng kiểm tra 10⁻⁵). Cả hai bản có cùng <b>16.640</b> tham số mỗi khối MSA. "
+          "(Kiểm tra này nằm trong <font name='VN'>E2/smoke_test.py</font>.) Khi huấn luyện, hai bản khởi tạo trọng số theo cách khác nhau, "
+          "nên kết quả huấn luyện của chúng không giống hệt nhau dù cùng seed.")]
+
+    out += [P("2.3 Ba cách tokenize", "h2"),
+        table([["Tokenizer", "Cách lấy token", "Số token (kèm CLS)"],
+               ["patch", "Chia ảnh thành lưới ô 4×4 không chồng lấn (49 ô); mỗi ô 16 giá trị qua Linear 16→64", "50"],
+               ["row", "Mỗi hàng của ảnh (28 giá trị) là một token (28 token); qua Linear 28→64", "29"],
+               ["cnnstem", "CNN 2 khối [Conv 3×3 + BatchNorm + ReLU + MaxPool] (32 và 64 kênh) cho feature map 7×7; "
+                           "mỗi vị trí là một token 64 chiều (49 token), qua Linear 64→64", "50"]],
+              [65, 355, 75])]
+
+    out += [P("2.4 Kết quả", "h2"),
+        table([["Tokenizer", "MSA", "Tham số", "Best epoch", "Val acc", "Test acc", "Giây/epoch", "Tổng train (s)"],
+               ["patch", "tự viết", "72.074", "10", "0,8800", "0,8753", "15,5", "155"],
+               ["patch", "PyTorch", "72.074", "9", "0,8788", "0,8736", "15,7", "157"],
+               ["row", "tự viết", "71.498", "9", "0,8888", "0,8816", "14,8", "148"],
+               ["row", "PyTorch", "71.498", "6", "0,8878", "0,8784", "14,8", "148"],
+               ["cnnstem", "tự viết", "94.154", "10", "0,9138", "0,9077", "17,7", "177"],
+               ["cnnstem", "PyTorch", "94.154", "8", "0,9060", "0,8986", "18,1", "181"]],
+              [66, 56, 56, 48, 50, 50, 72, 97]),
+        P("Nguồn: <font name='VN'>results/E2/summary.md</font> và <font name='VN'>log.txt</font> (10 epoch, seed 42, GPU CUDA).", "cap")]
+
+    out += [P("2.5 So sánh (i): MSA tự viết và MSA PyTorch (cùng cách tokenize)", "h2"),
+        table([["Tokenizer", "Test acc tự viết", "Test acc PyTorch", "Chênh lệch (tự viết − PyTorch)"],
+               ["patch", "0,8753", "0,8736", "+0,17 điểm"],
+               ["row", "0,8816", "0,8784", "+0,32 điểm"],
+               ["cnnstem", "0,9077", "0,8986", "+0,91 điểm"]],
+              [80, 110, 110, 195]), Spacer(1, 6),
+        img("results/E2/curves_patch.png", 440, "Hình 8. Tokenizer patch: loss và accuracy theo epoch của MSA tự viết (custom) và MSA PyTorch (torch)."),
+        img("results/E2/curves_row.png", 440, "Hình 9. Tokenizer row: custom và torch."),
+        img("results/E2/curves_cnnstem.png", 440, "Hình 10. Tokenizer cnnstem: custom và torch.")]
+    out += bullets([
+        "Hai bản cho kết quả rất gần nhau: chênh lệch test accuracy là 0,17 điểm (patch), 0,32 điểm (row) và 0,91 điểm (cnnstem), "
+        "và đường train loss/accuracy của hai bản gần như chồng lên nhau ở cả ba tokenizer (train accuracy epoch 10: 0,8968 và 0,8957 với patch; "
+        "0,9097 và 0,9097 với row; 0,9261 và 0,9248 với cnnstem). Điều này phù hợp với việc MSA tự viết tính cùng hàm với bản PyTorch.",
+        "Bản tự viết có test accuracy nhỉnh hơn ở cả ba tokenizer, nhưng chưa thể kết luận bản nào tốt hơn: mỗi cấu hình chỉ chạy một lần, "
+        "và validation accuracy dao động giữa các epoch (ví dụ cnnstem–PyTorch giảm từ 0,9028 ở epoch 9 xuống 0,8883 ở epoch 10, tức 1,45 điểm, "
+        "lớn hơn khoảng chênh 0,91 điểm giữa hai bản). Epoch tốt nhất cũng khác nhau giữa hai bản (ví dụ 6 so với 9 với row).",
+        "Thời gian huấn luyện gần như bằng nhau (155 và 157 s; 148 và 148 s; 177 và 181 s), nên trong thiết lập này bản PyTorch không nhanh hơn rõ rệt. "
+        "Chuỗi chỉ có 29–50 token và mô hình nhỏ, nên thời gian có thể bị chi phối bởi các phần khác (nạp dữ liệu, các lớp còn lại); báo cáo không có phép đo riêng để khẳng định."])
+
+    out += [P("2.6 So sánh (ii): các cách tokenize (dùng MSA tự viết)", "h2"),
+        img("results/E2/curves_tokenizers.png", 440, "Hình 11. So sánh ba tokenizer với MSA tự viết (nét đứt: train, nét liền: validation).")]
+    out += bullets([
+        "<b>cnnstem cho kết quả tốt nhất</b>: test accuracy 0,9077, cao hơn row (0,8816) 2,6 điểm và cao hơn patch (0,8753) 3,2 điểm; "
+        "đường validation của cnnstem nằm trên hai tokenizer còn lại ở hầu hết các epoch. Đổi lại cnnstem có nhiều tham số hơn (94.154 so với khoảng 72.000, nhiều hơn khoảng 31%) "
+        "và chậm hơn (17,7 s/epoch so với 14,8 s của row và 15,5 s của patch).",
+        "<b>row</b> (0,8816) nhỉnh hơn <b>patch</b> (0,8753) 0,6 điểm, nhưng chênh lệch nhỏ và validation accuracy của patch dao động nhiều "
+        "(0,8720 ở epoch 6, rồi 0,8610 và 0,8582 ở epoch 7–8), nên chưa nên kết luận chắc về thứ tự của hai tokenizer này. "
+        "Row dùng ít token nhất (29) và nhanh nhất (14,8 s/epoch).",
+        "patch học chậm hơn ở những epoch đầu (train accuracy epoch 1 là 0,6948 so với 0,7883 của row và 0,7769 của cnnstem).",
+        "Ở cả ba cấu hình, train accuracy vẫn còn tăng ở epoch 10 và khoảng cách train–validation nhỏ (1,2 đến 2,1 điểm), "
+        "nên mô hình có thể chưa hội tụ hết sau 10 epoch; báo cáo chưa thử huấn luyện lâu hơn.",
+        "Tham khảo (không cùng điều kiện): CNN của E1 đạt test accuracy 0,9244 với 15 epoch và 421.834 tham số; các Transformer nhỏ ở E2 "
+        "(10 epoch, 71.000–94.000 tham số) đạt 0,8736–0,9077."])
+
+    out += [P("2.7 Nhận xét và hạn chế", "h2")] + bullets([
+        "MSA tự viết đúng về số học (sai khác 1,19×10⁻⁷ so với PyTorch khi cùng trọng số) và cho kết quả huấn luyện gần bản PyTorch ở cả ba cách tokenize.",
+        "Trong các lần chạy này, cách lấy token ảnh hưởng nhiều hơn việc chọn bản MSA: chênh lệch giữa các tokenizer (tới 3,2 điểm) lớn hơn chênh lệch giữa hai bản MSA (tới 0,9 điểm).",
+        "Một giải thích có thể cho ưu thế của cnnstem là tầng convolution đã rút đặc trưng cục bộ trước khi attention làm việc, "
+        "trong khi patch và row đưa giá trị pixel thô qua một phép Linear. Báo cáo không có thí nghiệm riêng (ablation) để kiểm chứng; "
+        "cnnstem cũng có nhiều tham số hơn nên phần cải thiện không chỉ do cách tokenize.",
+        "Hạn chế: mỗi cấu hình chỉ chạy một lần với một seed nên chưa đo được độ dao động giữa các lần chạy; chỉ 10 epoch; chưa tinh chỉnh siêu tham số "
+        "(kích thước ẩn, số tầng, số head, patch size), chưa dùng dropout, data augmentation hay lịch learning rate; "
+        "chỉ thử patch 4×4 không chồng lấn và chưa thử các biến thể khác (patch chồng lấn, patch size khác, token theo kênh)."])
+    return out
+
 def section_pending(n, title):
     return [P(f"{n}. {title}", "h1"), P("Chưa thực hiện trong bản báo cáo này. Nội dung sẽ được bổ sung vào chính file này khi đến hạn.")]
 
 def section_ai():
     return [
         P("4. Ghi nhận việc sử dụng công cụ AI", "h1"),
-        P("Công cụ AI Claude (Anthropic) được dùng để hỗ trợ: phân tích đề bài và lập kế hoạch nộp bài; soạn khung mã nguồn E1 "
-          "(các file trong <font name='VN'>common/</font> và <font name='VN'>E1/</font>), tệp khung README, trang GitHub Pages; "
+        P("Công cụ AI Claude (Anthropic) được dùng để hỗ trợ: phân tích đề bài và lập kế hoạch nộp bài; soạn khung mã nguồn E1 và E2 "
+          "(các file trong <font name='VN'>common/</font>, <font name='VN'>E1/</font> và <font name='VN'>E2/</font>), tệp khung README, trang GitHub Pages; "
           "và soạn bản nháp báo cáo từ số liệu thật do sinh viên cung cấp. "
           "Sinh viên chạy thí nghiệm trên Google Colab, cung cấp log và hình kết quả, và chịu trách nhiệm kiểm tra và giải thích mã nguồn cũng như số liệu đã nộp."),
     ]
 
 def section_repro():
     return [
-        P("5. Tái lập kết quả E1", "h1"),
+        P("5. Tái lập kết quả E1 và E2", "h1"),
         P("Từ thư mục gốc của repo: <font name='VN'>python E1/run_e1.py --dataset fashion_mnist --epochs 15</font>. "
-          "Kết quả (log, cấu hình, bảng, biểu đồ, checkpoint) nằm trong <font name='VN'>results/E1/</font>. "
+          "Kết quả nằm trong <font name='VN'>results/E1/</font>. E2: <font name='VN'>python E2/run_e2.py --dataset fashion_mnist --epochs 10</font>, kết quả nằm trong <font name='VN'>results/E2/</font> (log, cấu hình, bảng, biểu đồ, checkpoint). "
           "Hướng dẫn môi trường và lệnh chạy chi tiết: xem README của repository."),
     ]
 
@@ -222,7 +306,7 @@ def build():
     doc = SimpleDocTemplate(OUT, pagesize=A4, leftMargin=50, rightMargin=50, topMargin=48, bottomMargin=48,
                             title="CO5085 - Báo cáo bài tập E1-E3", author="Phan Ngọc Trâm")
     story = front() + section_data() + section_e1() + \
-        section_pending(2, "E2 – MSA và tokenization") + section_pending(3, "E3 – LSTM / GRU trên chuỗi ảnh") + \
+        section_e2() + section_pending(3, "E3 – LSTM / GRU trên chuỗi ảnh") + \
         section_ai() + section_repro()
     doc.build(story, onFirstPage=footer, onLaterPages=footer)
     print("Đã tạo", os.path.abspath(OUT))
