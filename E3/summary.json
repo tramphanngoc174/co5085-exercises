@@ -1,0 +1,90 @@
+[
+  {
+    "model": "mlp (E1)",
+    "seq": "-",
+    "params": 535818,
+    "best_epoch": null,
+    "val_acc": 0.8983333110809326,
+    "test_acc": 0.8895999789237976,
+    "sec_per_epoch": null,
+    "total_train_sec": null,
+    "note": "checkpoint E1"
+  },
+  {
+    "model": "cnn (E1)",
+    "seq": "-",
+    "params": 421834,
+    "best_epoch": null,
+    "val_acc": 0.9291666746139526,
+    "test_acc": 0.9243999719619751,
+    "sec_per_epoch": null,
+    "total_train_sec": null,
+    "note": "checkpoint E1"
+  },
+  {
+    "model": "lstm_row",
+    "seq": "28x28",
+    "params": 82186,
+    "best_epoch": 10,
+    "val_acc": 0.89083331823349,
+    "test_acc": 0.8838000297546387,
+    "sec_per_epoch": 13.021788549423217,
+    "total_train_sec": 130.22467684745789,
+    "note": ""
+  },
+  {
+    "model": "gru_row",
+    "seq": "28x28",
+    "params": 61962,
+    "best_epoch": 10,
+    "val_acc": 0.8920000195503235,
+    "test_acc": 0.8903999924659729,
+    "sec_per_epoch": 12.5445387840271,
+    "total_train_sec": 125.45191669464111,
+    "note": ""
+  },
+  {
+    "model": "lstm_col",
+    "seq": "28x28",
+    "params": 82186,
+    "best_epoch": 9,
+    "val_acc": 0.8805000185966492,
+    "test_acc": 0.8783000111579895,
+    "sec_per_epoch": 13.05480091571808,
+    "total_train_sec": 130.55435252189636,
+    "note": ""
+  },
+  {
+    "model": "gru_col",
+    "seq": "28x28",
+    "params": 61962,
+    "best_epoch": 8,
+    "val_acc": 0.8865000009536743,
+    "test_acc": 0.8822000026702881,
+    "sec_per_epoch": 12.507324862480164,
+    "total_train_sec": 125.07921481132507,
+    "note": ""
+  },
+  {
+    "model": "lstm_patch",
+    "seq": "49x16",
+    "params": 76042,
+    "best_epoch": 10,
+    "val_acc": 0.8694999814033508,
+    "test_acc": 0.863099992275238,
+    "sec_per_epoch": 13.805996680259705,
+    "total_train_sec": 138.06673073768616,
+    "note": ""
+  },
+  {
+    "model": "gru_patch",
+    "seq": "49x16",
+    "params": 57354,
+    "best_epoch": 9,
+    "val_acc": 0.874666690826416,
+    "test_acc": 0.867900013923645,
+    "sec_per_epoch": 12.591844725608826,
+    "total_train_sec": 125.9237859249115,
+    "note": ""
+  }
+]

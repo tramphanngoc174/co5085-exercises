@@ -12,7 +12,7 @@
 | GitHub Pages (khung trang) | 19/10/2026 | Hoàn thành | `pages-w7` |
 | E1 – Softmax / MLP / CNN | 02/11/2026 | Đã có kết quả và báo cáo | `submit-e1` |
 | E2 – MSA + tokenization | 02/11/2026 | Đã có kết quả và báo cáo | `submit-e2` |
-| E3 – LSTM / GRU | 09/11/2026 | Chưa thực hiện | `submit-e3` |
+| E3 – LSTM / GRU | 09/11/2026 | Đã có kết quả và báo cáo | `submit-e3` |
 
 ## Cấu trúc thư mục
 

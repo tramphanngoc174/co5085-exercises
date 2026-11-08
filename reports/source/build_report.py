@@ -77,7 +77,7 @@ def front():
         table([["Bài", "Hạn nộp", "Trạng thái trong bản báo cáo này"],
                ["E1 – Softmax / MLP / CNN", "02/11/2026", "Đã có kết quả (mục 1)"],
                ["E2 – MSA + tokenization", "02/11/2026", "Đã có kết quả (mục 2)"],
-               ["E3 – LSTM / GRU", "09/11/2026", "Chưa có trong bản này (mục 3)"]],
+               ["E3 – LSTM / GRU", "09/11/2026", "Đã có kết quả (mục 3)"]],
               [170, 80, 245]),
         P("Báo cáo này là một file PDF chung, được cập nhật dần theo từng hạn nộp.", "p"),
     ]
@@ -276,23 +276,123 @@ def section_e2():
         "chỉ thử patch 4×4 không chồng lấn và chưa thử các biến thể khác (patch chồng lấn, patch size khác, token theo kênh)."])
     return out
 
+def section_e3():
+    out = [P("3. E3 – LSTM / GRU trên chuỗi ảnh", "h1")]
+
+    out += [P("3.1 Thiết lập chung", "h2")] + bullets([
+        "Mô hình: một tầng <font name='VN'>nn.LSTM</font> hoặc <font name='VN'>nn.GRU</font> (đề cho phép dùng module có sẵn) với 128 đơn vị ẩn, "
+        "đầu vào là chuỗi do ảnh tạo ra; phân loại bằng trạng thái ẩn ở bước cuối qua một lớp Linear 10 lớp (file <font name='VN'>E3/models.py</font>).",
+        "Dữ liệu, split, seed 42 và vòng lặp huấn luyện tự viết giống E1; Adam, learning rate 0,001, batch 128, Cross-Entropy, "
+        "<b>10 epoch</b>, chọn epoch theo validation accuracy. Mỗi cấu hình chỉ chạy một lần.",
+        "Baseline không hồi quy: <b>MLP và CNN của E1</b>, nạp từ checkpoint đã lưu (<font name='VN'>results/E1/mlp</font>, <font name='VN'>results/E1/cnn</font>), "
+        "cùng split và cùng tập test. Hai baseline này được huấn luyện 15 epoch ở E1 (chọn epoch 12 và 13), còn LSTM/GRU chỉ 10 epoch."])
+
+    out += [P("3.2 Ba cách biến ảnh thành chuỗi", "h2"),
+        table([["Tên", "Cách tạo chuỗi", "Chuỗi (bước × giá trị)"],
+               ["row", "Mỗi hàng của ảnh là một bước thời gian; đọc từ hàng trên xuống hàng dưới", "28 × 28"],
+               ["col", "Mỗi cột của ảnh là một bước thời gian; đọc từ cột trái sang cột phải", "28 × 28"],
+               ["patch", "Ảnh chia thành các ô 4×4 không chồng lấn; mỗi ô (16 giá trị) là một bước, quét theo hàng từ trái sang phải rồi từ trên xuống dưới", "49 × 16"]],
+              [50, 355, 90])]
+
+    out += [P("3.3 Kết quả", "h2"),
+        table([["Mô hình", "Chuỗi", "Tham số", "Best epoch", "Val acc", "Test acc", "Giây/epoch"],
+               ["MLP (E1)", "–", "535.818", "–", "0,8983", "0,8896", "–"],
+               ["CNN (E1)", "–", "421.834", "–", "0,9292", "0,9244", "–"],
+               ["LSTM", "row", "82.186", "10", "0,8908", "0,8838", "13,0"],
+               ["GRU", "row", "61.962", "10", "0,8920", "0,8904", "12,5"],
+               ["LSTM", "col", "82.186", "9", "0,8805", "0,8783", "13,1"],
+               ["GRU", "col", "61.962", "8", "0,8865", "0,8822", "12,5"],
+               ["LSTM", "patch", "76.042", "10", "0,8695", "0,8631", "13,8"],
+               ["GRU", "patch", "57.354", "9", "0,8747", "0,8679", "12,6"]],
+              [70, 55, 70, 60, 60, 60, 70]),
+        P("Nguồn: <font name='VN'>results/E3/summary.md</font> và <font name='VN'>log.txt</font> (seed 42, GPU CUDA).", "cap")]
+
+    out += [P("3.4 So sánh LSTM và GRU (cùng cách tạo chuỗi)", "h2"),
+        table([["Chuỗi", "Test acc LSTM", "Test acc GRU", "Chênh lệch (GRU − LSTM)", "Tham số LSTM / GRU"],
+               ["row", "0,8838", "0,8904", "+0,66 điểm", "82.186 / 61.962"],
+               ["col", "0,8783", "0,8822", "+0,39 điểm", "82.186 / 61.962"],
+               ["patch", "0,8631", "0,8679", "+0,48 điểm", "76.042 / 57.354"]],
+              [55, 95, 95, 130, 120]), Spacer(1, 6),
+        img("results/E3/curves_row.png", 420, "Hình 12. Chuỗi row: loss và accuracy của LSTM và GRU."),
+        img("results/E3/curves_col.png", 420, "Hình 13. Chuỗi col: LSTM và GRU."),
+        img("results/E3/curves_patch.png", 420, "Hình 14. Chuỗi patch: LSTM và GRU.")]
+    out += bullets([
+        "GRU có test accuracy cao hơn LSTM ở cả ba cách tạo chuỗi, nhưng chỉ từ 0,39 đến 0,66 điểm; với một seed và validation accuracy còn dao động, "
+        "chênh lệch này nhỏ nên chưa đủ để kết luận GRU tốt hơn.",
+        "GRU có ít tham số hơn khoảng 25% (61.962 so với 82.186; 57.354 so với 76.042) và nhỉnh hơn về tốc độ (12,5–12,6 s/epoch so với 13,0–13,8 s). "
+        "Do đó GRU đạt kết quả tương đương hoặc nhỉnh hơn với chi phí thấp hơn trong thiết lập này.",
+        "Trong cả ba hình, train loss của GRU thấp hơn LSTM ở cùng epoch (ví dụ chuỗi row: 0,2368 so với 0,2524 ở epoch 10), tức là GRU khớp dữ liệu train nhanh hơn một chút."])
+
+    out += [P("3.5 So sánh các cách tạo chuỗi", "h2"),
+        img("results/E3/curves_representations_lstm.png", 420, "Hình 15. LSTM: so sánh ba cách tạo chuỗi."),
+        img("results/E3/curves_representations_gru.png", 420, "Hình 16. GRU: so sánh ba cách tạo chuỗi.")]
+    out += bullets([
+        "Thứ tự giống nhau cho cả hai loại RNN: <b>row &gt; col &gt; patch</b>. Với GRU: 0,8904, 0,8822 và 0,8679; với LSTM: 0,8838, 0,8783 và 0,8631.",
+        "Row hơn patch khoảng 2 điểm (2,25 điểm với GRU, 2,07 điểm với LSTM) và hơn col 0,6–0,8 điểm (0,82 điểm với GRU, 0,55 điểm với LSTM). Chênh lệch giữa row và col nhỏ, "
+        "còn chênh lệch với patch rõ hơn và nhất quán ở cả hai RNN.",
+        "Chuỗi patch học chậm hơn ở những epoch đầu (train accuracy epoch 1 khoảng 0,62 so với khoảng 0,73 của row) và có chuỗi dài hơn (49 bước so với 28). "
+        "Cách tạo chuỗi patch cũng khác về số giá trị mỗi bước (16 so với 28), nên báo cáo không tách được ảnh hưởng của độ dài chuỗi với ảnh hưởng của cách cắt.",
+        "Cả ba cách tạo chuỗi có best epoch ở 8–10 trong 10 epoch và đường validation vẫn đang đi lên hoặc đi ngang nhẹ, nên mô hình có thể chưa hội tụ hết."])
+
+    out += [P("3.6 So sánh với baseline MLP và CNN của E1", "h2")] + bullets([
+        "GRU–row (0,8904) <b>ngang MLP</b> (0,8896; chênh 0,08 điểm) nhưng chỉ dùng 61.962 tham số, ít hơn khoảng 8,6 lần (535.818).",
+        "GRU–row <b>thấp hơn CNN</b> 3,4 điểm (0,8904 so với 0,9244) và dùng ít tham số hơn khoảng 6,8 lần (421.834).",
+        "LSTM/GRU với chuỗi col và patch đều thấp hơn MLP (0,8631–0,8822 so với 0,8896) và thấp hơn CNN.",
+        "Lưu ý khi so sánh: baseline E1 được huấn luyện 15 epoch còn RNN 10 epoch, và số tham số khác nhau nhiều; "
+        "vì vậy bảng này cho thấy vị trí tương đối của các mô hình trong điều kiện đã chạy, không phải so sánh công bằng tuyệt đối."])
+
+    out += [P("3.7 Thí nghiệm xáo trộn thứ tự hàng ảnh", "h2"),
+        P("<b>Mục đích:</b> xem mỗi mô hình phụ thuộc vào thứ tự hàng của ảnh đến mức nào. "
+          "<b>Cách làm:</b> các mô hình đã huấn luyện trên ảnh bình thường (không huấn luyện lại) được đánh giá trên tập test mà các hàng của mỗi ảnh bị đổi thứ tự. "
+          "Dùng 5 hoán vị ngẫu nhiên cố định (cùng 5 hoán vị cho mọi mô hình), báo cáo trung bình ± độ lệch chuẩn; ngoài ra thử một phép đảo ngược thứ tự hàng (lật dọc ảnh). "
+          "Ngẫu nhiên đoán bừa trên 10 lớp cho accuracy khoảng 0,10."),
+        table([["Mô hình", "Tham số", "Acc gốc", "Acc xáo hàng (TB ± std)", "Giảm (điểm)", "Acc đảo ngược", "Giảm (điểm)"],
+               ["MLP (E1)", "535.818", "0,8896", "0,3590 ± 0,0693", "53,06", "0,2225", "66,71"],
+               ["CNN (E1)", "421.834", "0,9244", "0,3495 ± 0,0316", "57,49", "0,2272", "69,72"],
+               ["LSTM row", "82.186", "0,8838", "0,4116 ± 0,0605", "47,22", "0,2498", "63,40"],
+               ["GRU row", "61.962", "0,8904", "0,3744 ± 0,0706", "51,60", "0,2105", "67,99"],
+               ["LSTM col", "82.186", "0,8783", "0,2881 ± 0,0871", "59,02", "0,2261", "65,22"],
+               ["GRU col", "61.962", "0,8822", "0,3230 ± 0,0782", "55,92", "0,1992", "68,30"],
+               ["LSTM patch", "76.042", "0,8631", "0,2693 ± 0,0578", "59,38", "0,2615", "60,16"],
+               ["GRU patch", "57.354", "0,8679", "0,3114 ± 0,0715", "55,65", "0,2194", "64,85"]],
+              [68, 55, 52, 100, 52, 62, 52]),
+        P("Nguồn: <font name='VN'>results/E3/shuffle.md</font>. Độ lệch chuẩn tính trên 5 hoán vị (ddof = 1).", "cap"),
+        img("results/E3/shuffle.png", 440, "Hình 17. Test accuracy trên ảnh gốc và trên ảnh bị xáo hàng (cột lỗi: độ lệch chuẩn giữa 5 hoán vị).")]
+    out += bullets([
+        "<b>Mọi mô hình đều sụp đổ khi hàng bị xáo:</b> accuracy giảm từ 47 đến 59 điểm, còn 0,27–0,41 (so với khoảng 0,88–0,92 ban đầu); "
+        "không mô hình nào bền với việc đổi thứ tự hàng.",
+        "<b>So với MLP và CNN:</b> hai mô hình RNN theo hàng (LSTM row giảm 47,22 điểm, GRU row giảm 51,60 điểm) giảm ít hơn CNN (57,49) và ở mức gần MLP (53,06). "
+        "Tuy nhiên độ lệch chuẩn giữa các hoán vị lớn (3 đến 9 điểm), cùng bậc với chênh lệch giữa các mô hình, nên thí nghiệm này <b>chưa cho thấy rõ</b> RNN bền hơn MLP hay CNN.",
+        "Đảo ngược thứ tự hàng làm accuracy thấp hơn trung bình của các hoán vị ngẫu nhiên ở cả 8 mô hình (còn 0,20–0,26), tức giảm 60–70 điểm.",
+        "<b>Cách diễn giải cần thận trọng:</b> chỉ với mô hình <i>row</i>, xáo hàng mới đúng là xáo thứ tự các bước thời gian. Với <i>col</i> và <i>patch</i>, xáo hàng làm thay đổi nội dung bên trong mỗi bước chứ không chỉ đổi thứ tự các bước, "
+        "nên mức giảm của chúng không đo thuần túy phụ thuộc thời gian. MLP và CNN cũng gục vì các đặc trưng học được gắn với vị trí pixel. "
+        "Do đó thí nghiệm cho thấy mô hình nhạy với thứ tự hàng đến đâu, nhưng không chứng minh trực tiếp RNN “bắt phụ thuộc thời gian” tốt hơn MLP/CNN."])
+
+    out += [P("3.8 Nhận xét và hạn chế", "h2")] + bullets([
+        "RNN nhỏ (khoảng 57.000–82.000 tham số) đạt 0,863–0,890 test accuracy; tốt nhất là GRU với chuỗi row (0,8904), ngang MLP nhưng kém CNN 3,4 điểm. "
+        "Cách tạo chuỗi quan trọng hơn việc chọn LSTM hay GRU: chênh lệch giữa các cách tạo chuỗi (tới 2,3 điểm) lớn hơn chênh lệch giữa LSTM và GRU (dưới 0,7 điểm).",
+        "Hạn chế: mỗi cấu hình chỉ chạy một lần với một seed; chỉ 10 epoch và nhiều đường cong vẫn đang đi lên; chưa tinh chỉnh siêu tham số (số đơn vị ẩn, số tầng, learning rate); "
+        "chỉ dùng một tầng RNN một chiều và chỉ lấy trạng thái ẩn cuối; baseline E1 huấn luyện 15 epoch trong khi RNN 10 epoch.",
+        "Thí nghiệm xáo hàng chỉ xáo ở thời điểm test, chỉ dùng 5 hoán vị và không huấn luyện lại mô hình trên dữ liệu đã xáo, nên chưa trả lời được câu hỏi mô hình nào có thể học tốt khi thứ tự hàng bị phá vỡ."])
+    return out
+
 def section_pending(n, title):
     return [P(f"{n}. {title}", "h1"), P("Chưa thực hiện trong bản báo cáo này. Nội dung sẽ được bổ sung vào chính file này khi đến hạn.")]
 
 def section_ai():
     return [
         P("4. Ghi nhận việc sử dụng công cụ AI", "h1"),
-        P("Công cụ AI Claude (Anthropic) được dùng để hỗ trợ: phân tích đề bài và lập kế hoạch nộp bài; soạn khung mã nguồn E1 và E2 "
-          "(các file trong <font name='VN'>common/</font>, <font name='VN'>E1/</font> và <font name='VN'>E2/</font>), tệp khung README, trang GitHub Pages; "
+        P("Công cụ AI Claude (Anthropic) được dùng để hỗ trợ: phân tích đề bài và lập kế hoạch nộp bài; soạn khung mã nguồn E1, E2 và E3 "
+          "(các file trong <font name='VN'>common/</font>, <font name='VN'>E1/</font>, <font name='VN'>E2/</font> và <font name='VN'>E3/</font>), tệp khung README, trang GitHub Pages; "
           "và soạn bản nháp báo cáo từ số liệu thật do sinh viên cung cấp. "
           "Sinh viên chạy thí nghiệm trên Google Colab, cung cấp log và hình kết quả, và chịu trách nhiệm kiểm tra và giải thích mã nguồn cũng như số liệu đã nộp."),
     ]
 
 def section_repro():
     return [
-        P("5. Tái lập kết quả E1 và E2", "h1"),
+        P("5. Tái lập kết quả E1, E2 và E3", "h1"),
         P("Từ thư mục gốc của repo: <font name='VN'>python E1/run_e1.py --dataset fashion_mnist --epochs 15</font>. "
-          "Kết quả nằm trong <font name='VN'>results/E1/</font>. E2: <font name='VN'>python E2/run_e2.py --dataset fashion_mnist --epochs 10</font>, kết quả nằm trong <font name='VN'>results/E2/</font> (log, cấu hình, bảng, biểu đồ, checkpoint). "
+          "Kết quả nằm trong <font name='VN'>results/E1/</font>. E2: <font name='VN'>python E2/run_e2.py --dataset fashion_mnist --epochs 10</font>, kết quả nằm trong <font name='VN'>results/E2/</font>. E3: <font name='VN'>python E3/run_e3.py --dataset fashion_mnist --epochs 10</font> (cần checkpoint E1 trong <font name='VN'>results/E1/</font>), kết quả nằm trong <font name='VN'>results/E3/</font> (log, cấu hình, bảng, biểu đồ, checkpoint). "
           "Hướng dẫn môi trường và lệnh chạy chi tiết: xem README của repository."),
     ]
 
@@ -306,7 +406,7 @@ def build():
     doc = SimpleDocTemplate(OUT, pagesize=A4, leftMargin=50, rightMargin=50, topMargin=48, bottomMargin=48,
                             title="CO5085 - Báo cáo bài tập E1-E3", author="Phan Ngọc Trâm")
     story = front() + section_data() + section_e1() + \
-        section_e2() + section_pending(3, "E3 – LSTM / GRU trên chuỗi ảnh") + \
+        section_e2() + section_e3() + \
         section_ai() + section_repro()
     doc.build(story, onFirstPage=footer, onLaterPages=footer)
     print("Đã tạo", os.path.abspath(OUT))

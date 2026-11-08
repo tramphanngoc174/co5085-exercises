@@ -1,0 +1,120 @@
+
+===== baseline mlp (checkpoint E1) | params 535,818 | val 0.8983 | test 0.8896
+
+===== baseline cnn (checkpoint E1) | params 421,834 | val 0.9292 | test 0.9244
+
+===== LSTM | chuỗi = row =====
+số tham số: 82,186 | chuỗi: 28 bước x 28 giá trị
+epoch 01/10 | train loss 0.7516 acc 0.7283 | val loss 0.4689 acc 0.8315 | 13.1s
+epoch 02/10 | train loss 0.4185 acc 0.8492 | val loss 0.3996 acc 0.8570 | 13.1s
+epoch 03/10 | train loss 0.3678 acc 0.8660 | val loss 0.3640 acc 0.8663 | 13.0s
+epoch 04/10 | train loss 0.3381 acc 0.8750 | val loss 0.3514 acc 0.8683 | 13.0s
+epoch 05/10 | train loss 0.3171 acc 0.8835 | val loss 0.3414 acc 0.8745 | 12.9s
+epoch 06/10 | train loss 0.2991 acc 0.8891 | val loss 0.3420 acc 0.8720 | 12.9s
+epoch 07/10 | train loss 0.2856 acc 0.8934 | val loss 0.3224 acc 0.8783 | 12.9s
+epoch 08/10 | train loss 0.2748 acc 0.8978 | val loss 0.3320 acc 0.8812 | 13.1s
+epoch 09/10 | train loss 0.2635 acc 0.9022 | val loss 0.3069 acc 0.8870 | 13.2s
+epoch 10/10 | train loss 0.2524 acc 0.9077 | val loss 0.3058 acc 0.8908 | 13.1s
+best epoch 10 | val acc 0.8908 | test acc 0.8838 | train 130s
+
+===== GRU | chuỗi = row =====
+số tham số: 61,962 | chuỗi: 28 bước x 28 giá trị
+epoch 01/10 | train loss 0.7318 acc 0.7378 | val loss 0.4741 acc 0.8278 | 12.6s
+epoch 02/10 | train loss 0.4041 acc 0.8545 | val loss 0.3976 acc 0.8515 | 12.6s
+epoch 03/10 | train loss 0.3489 acc 0.8726 | val loss 0.3593 acc 0.8667 | 12.5s
+epoch 04/10 | train loss 0.3173 acc 0.8844 | val loss 0.3283 acc 0.8788 | 12.5s
+epoch 05/10 | train loss 0.3002 acc 0.8894 | val loss 0.3165 acc 0.8855 | 12.4s
+epoch 06/10 | train loss 0.2805 acc 0.8974 | val loss 0.3023 acc 0.8888 | 12.5s
+epoch 07/10 | train loss 0.2673 acc 0.9024 | val loss 0.3012 acc 0.8905 | 12.7s
+epoch 08/10 | train loss 0.2578 acc 0.9047 | val loss 0.3017 acc 0.8913 | 12.6s
+epoch 09/10 | train loss 0.2467 acc 0.9086 | val loss 0.2972 acc 0.8910 | 12.5s
+epoch 10/10 | train loss 0.2368 acc 0.9131 | val loss 0.2985 acc 0.8920 | 12.4s
+best epoch 10 | val acc 0.8920 | test acc 0.8904 | train 125s
+
+===== LSTM | chuỗi = col =====
+số tham số: 82,186 | chuỗi: 28 bước x 28 giá trị
+epoch 01/10 | train loss 0.7729 acc 0.7167 | val loss 0.5131 acc 0.8077 | 13.1s
+epoch 02/10 | train loss 0.4609 acc 0.8311 | val loss 0.4424 acc 0.8365 | 13.0s
+epoch 03/10 | train loss 0.3992 acc 0.8543 | val loss 0.4037 acc 0.8525 | 13.0s
+epoch 04/10 | train loss 0.3665 acc 0.8650 | val loss 0.3778 acc 0.8602 | 13.0s
+epoch 05/10 | train loss 0.3444 acc 0.8733 | val loss 0.3602 acc 0.8632 | 13.0s
+epoch 06/10 | train loss 0.3260 acc 0.8805 | val loss 0.3417 acc 0.8743 | 13.2s
+epoch 07/10 | train loss 0.3100 acc 0.8841 | val loss 0.3441 acc 0.8687 | 13.1s
+epoch 08/10 | train loss 0.2977 acc 0.8898 | val loss 0.3315 acc 0.8778 | 13.0s
+epoch 09/10 | train loss 0.2843 acc 0.8944 | val loss 0.3292 acc 0.8805 | 12.9s
+epoch 10/10 | train loss 0.2778 acc 0.8972 | val loss 0.3356 acc 0.8778 | 13.2s
+best epoch 9 | val acc 0.8805 | test acc 0.8783 | train 131s
+
+===== GRU | chuỗi = col =====
+số tham số: 61,962 | chuỗi: 28 bước x 28 giá trị
+epoch 01/10 | train loss 0.7933 acc 0.7060 | val loss 0.5208 acc 0.8022 | 12.4s
+epoch 02/10 | train loss 0.4592 acc 0.8317 | val loss 0.4282 acc 0.8383 | 12.5s
+epoch 03/10 | train loss 0.3954 acc 0.8560 | val loss 0.3798 acc 0.8625 | 12.6s
+epoch 04/10 | train loss 0.3562 acc 0.8694 | val loss 0.3654 acc 0.8648 | 12.4s
+epoch 05/10 | train loss 0.3328 acc 0.8787 | val loss 0.3494 acc 0.8702 | 12.6s
+epoch 06/10 | train loss 0.3106 acc 0.8870 | val loss 0.3377 acc 0.8743 | 12.5s
+epoch 07/10 | train loss 0.2922 acc 0.8926 | val loss 0.3303 acc 0.8802 | 12.5s
+epoch 08/10 | train loss 0.2808 acc 0.8969 | val loss 0.3162 acc 0.8865 | 12.5s
+epoch 09/10 | train loss 0.2705 acc 0.8998 | val loss 0.3119 acc 0.8847 | 12.4s
+epoch 10/10 | train loss 0.2596 acc 0.9046 | val loss 0.3116 acc 0.8847 | 12.6s
+best epoch 8 | val acc 0.8865 | test acc 0.8822 | train 125s
+
+===== LSTM | chuỗi = patch =====
+số tham số: 76,042 | chuỗi: 49 bước x 16 giá trị
+epoch 01/10 | train loss 1.0342 acc 0.6217 | val loss 0.6610 acc 0.7487 | 13.8s
+epoch 02/10 | train loss 0.5744 acc 0.7924 | val loss 0.5463 acc 0.7970 | 13.9s
+epoch 03/10 | train loss 0.4892 acc 0.8244 | val loss 0.4721 acc 0.8230 | 13.8s
+epoch 04/10 | train loss 0.4478 acc 0.8376 | val loss 0.4518 acc 0.8335 | 14.1s
+epoch 05/10 | train loss 0.4164 acc 0.8491 | val loss 0.4195 acc 0.8413 | 13.9s
+epoch 06/10 | train loss 0.3957 acc 0.8557 | val loss 0.4037 acc 0.8488 | 13.7s
+epoch 07/10 | train loss 0.3763 acc 0.8625 | val loss 0.4068 acc 0.8518 | 13.6s
+epoch 08/10 | train loss 0.3592 acc 0.8677 | val loss 0.3735 acc 0.8613 | 13.7s
+epoch 09/10 | train loss 0.3492 acc 0.8725 | val loss 0.3795 acc 0.8585 | 14.0s
+epoch 10/10 | train loss 0.3317 acc 0.8786 | val loss 0.3610 acc 0.8695 | 13.6s
+best epoch 10 | val acc 0.8695 | test acc 0.8631 | train 138s
+
+===== GRU | chuỗi = patch =====
+số tham số: 57,354 | chuỗi: 49 bước x 16 giá trị
+epoch 01/10 | train loss 1.0356 acc 0.6192 | val loss 0.6503 acc 0.7515 | 12.6s
+epoch 02/10 | train loss 0.5431 acc 0.8051 | val loss 0.4840 acc 0.8200 | 12.6s
+epoch 03/10 | train loss 0.4551 acc 0.8368 | val loss 0.4378 acc 0.8418 | 12.5s
+epoch 04/10 | train loss 0.4141 acc 0.8499 | val loss 0.4068 acc 0.8510 | 12.6s
+epoch 05/10 | train loss 0.3841 acc 0.8592 | val loss 0.3886 acc 0.8553 | 12.4s
+epoch 06/10 | train loss 0.3640 acc 0.8666 | val loss 0.3615 acc 0.8643 | 12.3s
+epoch 07/10 | train loss 0.3395 acc 0.8757 | val loss 0.3704 acc 0.8592 | 12.6s
+epoch 08/10 | train loss 0.3240 acc 0.8805 | val loss 0.3649 acc 0.8635 | 12.6s
+epoch 09/10 | train loss 0.3107 acc 0.8849 | val loss 0.3421 acc 0.8747 | 12.9s
+epoch 10/10 | train loss 0.2948 acc 0.8907 | val loss 0.3368 acc 0.8737 | 12.7s
+best epoch 9 | val acc 0.8747 | test acc 0.8679 | train 126s
+
+| Mô hình | Chuỗi (bước x giá trị) | Tham số | Best epoch | Val acc | Test acc | s/epoch | Ghi chú |
+|---|---|---|---|---|---|---|---|
+| mlp (E1) | - | 535,818 | – | 0.8983 | 0.8896 | – | checkpoint E1 |
+| cnn (E1) | - | 421,834 | – | 0.9292 | 0.9244 | – | checkpoint E1 |
+| lstm_row | 28x28 | 82,186 | 10 | 0.8908 | 0.8838 | 13.0 |  |
+| gru_row | 28x28 | 61,962 | 10 | 0.8920 | 0.8904 | 12.5 |  |
+| lstm_col | 28x28 | 82,186 | 9 | 0.8805 | 0.8783 | 13.1 |  |
+| gru_col | 28x28 | 61,962 | 8 | 0.8865 | 0.8822 | 12.5 |  |
+| lstm_patch | 49x16 | 76,042 | 10 | 0.8695 | 0.8631 | 13.8 |  |
+| gru_patch | 49x16 | 57,354 | 9 | 0.8747 | 0.8679 | 12.6 |  |
+
+===== Thí nghiệm xáo hàng ảnh test (5 hoán vị ngẫu nhiên + đảo ngược) =====
+mlp (E1)     gốc 0.8896 | xáo 0.3590 ± 0.0693 (giảm 53.06 điểm) | đảo ngược 0.2225 (giảm 66.71 điểm)
+cnn (E1)     gốc 0.9244 | xáo 0.3495 ± 0.0316 (giảm 57.49 điểm) | đảo ngược 0.2272 (giảm 69.72 điểm)
+lstm_row     gốc 0.8838 | xáo 0.4116 ± 0.0605 (giảm 47.22 điểm) | đảo ngược 0.2498 (giảm 63.40 điểm)
+gru_row      gốc 0.8904 | xáo 0.3744 ± 0.0706 (giảm 51.60 điểm) | đảo ngược 0.2105 (giảm 67.99 điểm)
+lstm_col     gốc 0.8783 | xáo 0.2881 ± 0.0871 (giảm 59.02 điểm) | đảo ngược 0.2261 (giảm 65.22 điểm)
+gru_col      gốc 0.8822 | xáo 0.3230 ± 0.0782 (giảm 55.92 điểm) | đảo ngược 0.1992 (giảm 68.30 điểm)
+lstm_patch   gốc 0.8631 | xáo 0.2693 ± 0.0578 (giảm 59.38 điểm) | đảo ngược 0.2615 (giảm 60.16 điểm)
+gru_patch    gốc 0.8679 | xáo 0.3114 ± 0.0715 (giảm 55.65 điểm) | đảo ngược 0.2194 (giảm 64.85 điểm)
+
+| Mô hình | Tham số | Acc gốc | Acc xáo hàng (TB ± std) | Giảm (điểm %) | Acc đảo ngược hàng | Giảm (điểm %) |
+|---|---|---|---|---|---|---|
+| mlp (E1) | 535,818 | 0.8896 | 0.3590 ± 0.0693 | 53.06 | 0.2225 | 66.71 |
+| cnn (E1) | 421,834 | 0.9244 | 0.3495 ± 0.0316 | 57.49 | 0.2272 | 69.72 |
+| lstm_row | 82,186 | 0.8838 | 0.4116 ± 0.0605 | 47.22 | 0.2498 | 63.40 |
+| gru_row | 61,962 | 0.8904 | 0.3744 ± 0.0706 | 51.60 | 0.2105 | 67.99 |
+| lstm_col | 82,186 | 0.8783 | 0.2881 ± 0.0871 | 59.02 | 0.2261 | 65.22 |
+| gru_col | 61,962 | 0.8822 | 0.3230 ± 0.0782 | 55.92 | 0.1992 | 68.30 |
+| lstm_patch | 76,042 | 0.8631 | 0.2693 ± 0.0578 | 59.38 | 0.2615 | 60.16 |
+| gru_patch | 57,354 | 0.8679 | 0.3114 ± 0.0715 | 55.65 | 0.2194 | 64.85 |
