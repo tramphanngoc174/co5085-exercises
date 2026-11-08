@@ -56,7 +56,12 @@ python E2/run_e2.py --dataset fashion_mnist --epochs 10
 ```
 Kết quả nằm trong `results/E2/`.
 
-*(E3: sẽ bổ sung.)*
+**E3** (LSTM / GRU trên chuỗi ảnh, baseline E1, thí nghiệm xáo hàng):
+```bash
+python E3/smoke_test.py
+python E3/run_e3.py --dataset fashion_mnist --epochs 10
+```
+Baseline MLP/CNN được nạp từ checkpoint `results/E1/*/model.pt`. Kết quả nằm trong `results/E3/`.
 
 ## Ghi nhận việc sử dụng công cụ AI
 
