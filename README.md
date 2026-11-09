@@ -13,6 +13,7 @@
 | E1 – Softmax / MLP / CNN | 02/11/2026 | Đã có kết quả và báo cáo | `submit-e1` |
 | E2 – MSA + tokenization | 02/11/2026 | Đã có kết quả và báo cáo | `submit-e2` |
 | E3 – LSTM / GRU | 09/11/2026 | Đã có kết quả và báo cáo | `submit-e3` |
+| A1.2 – CNN vs Transformer (CIFAR-100) | 09/11/2026 | Đã có kết quả và báo cáo (`reports/a1_report.pdf`) | `submit-a1` |
 
 ## Cấu trúc thư mục
 
@@ -75,4 +76,4 @@ Kết quả nằm trong `results/A1/`.
 
 ## Ghi nhận việc sử dụng công cụ AI
 
-Công cụ AI (Claude, Anthropic) được dùng để hỗ trợ: phân tích đề và lập kế hoạch; soạn khung mã nguồn E1 (`common/`, `E1/`), tệp khung README, trang GitHub Pages; soạn bản nháp báo cáo từ số liệu thật do sinh viên cung cấp. Sinh viên chạy thí nghiệm trên Google Colab và chịu trách nhiệm kiểm tra, giải thích mã nguồn và số liệu. *(Sẽ cập nhật ở các mốc E2, E3.)*
+Công cụ AI (Claude, Anthropic) được dùng để hỗ trợ: phân tích đề và lập kế hoạch; soạn khung mã nguồn E1–E3 và A1 (`common/`, `E1/`, `E2/`, `E3/`, `A1/`), tệp khung README, trang GitHub Pages; soạn bản nháp báo cáo từ số liệu thật do sinh viên cung cấp. Sinh viên chạy thí nghiệm trên Google Colab và chịu trách nhiệm kiểm tra, giải thích mã nguồn và số liệu.

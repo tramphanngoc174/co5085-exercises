@@ -1,0 +1,13 @@
+{
+  "arch": "resnet18",
+  "mode": "full",
+  "params_total": 11227812,
+  "params_trainable": 11227812,
+  "best_epoch": 13,
+  "val_acc": 0.7924,
+  "test_acc": 0.7982,
+  "macro_f1": 0.7981114727809657,
+  "sec_per_epoch": 76.63953313827514,
+  "total_sec": 1149.6348042488098,
+  "peak_mem_mb": 1777.76123046875
+}

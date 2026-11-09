@@ -1,0 +1,13 @@
+{
+  "arch": "vit_tiny",
+  "mode": "scratch",
+  "params_total": 5543716,
+  "params_trainable": 5543716,
+  "best_epoch": 15,
+  "val_acc": 0.3802,
+  "test_acc": 0.3911,
+  "macro_f1": 0.3829349446697634,
+  "sec_per_epoch": 67.55229086875916,
+  "total_sec": 1013.3429780006409,
+  "peak_mem_mb": 2308.818359375
+}

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A1 – CNN và Transformer trên CIFAR-100 – Phan Ngọc Trâm</title>
+<style>
+  :root { --bg:#ffffff; --fg:#1f2328; --muted:#59636e; --card:#f6f8fa; --line:#d1d9e0; --link:#0969da; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#0d1117; --fg:#e6edf3; --muted:#9198a1; --card:#151b23; --line:#3d444d; --link:#4493f8; }
+  }
+  body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; background:var(--bg); color:var(--fg);
+         max-width:820px; margin:0 auto; padding:2rem 1rem; line-height:1.6; }
+  h1 { font-size:1.6rem; margin-bottom:.2rem; } h2 { margin-top:2rem; }
+  p.sub { color:var(--muted); margin-top:0; } a { color:var(--link); }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:8px; padding:1rem 1.25rem; margin:1rem 0; }
+  table { border-collapse:collapse; width:100%; }
+  th, td { border:1px solid var(--line); padding:.45rem .6rem; text-align:left; font-size:.92rem; }
+  .table-wrap { overflow-x:auto; } img { max-width:100%; height:auto; }
+  figure { margin:1rem 0; } figcaption { color:var(--muted); font-size:.88rem; text-align:center; }
+</style>
+</head>
+<body>
+  <p><a href="index.html">← Trang chủ</a></p>
+  <h1>Bài tập lớn A1 – CNN và Transformer trên CIFAR-100</h1>
+  <p class="sub">CO5085 – Học sâu và ứng dụng trong thị giác máy tính – HK 261 (2026–2027)</p>
+
+  <div class="card">
+    <strong>Dataset:</strong> CIFAR-100 (100 lớp; 45.000 train / 5.000 validation / 10.000 test)<br>
+    <strong>CNN:</strong> ResNet-18 &nbsp;|&nbsp; <strong>Transformer:</strong> ViT-Tiny/16 (timm)<br>
+    <strong>Chế độ:</strong> scratch, head (đóng băng backbone), partial (đóng băng nửa đầu), full (fine-tune toàn bộ)<br>
+    <strong>Code:</strong> <a href="https://github.com/tramphanngoc174/co5085-exercises/tree/main/A1">thư mục A1 trên GitHub</a> &nbsp;|&nbsp;
+    <strong>Báo cáo PDF:</strong> <a href="https://github.com/tramphanngoc174/co5085-exercises/blob/main/reports/a1_report.pdf">reports/a1_report.pdf</a>
+  </div>
+
+  <h2>1. Dataset và EDA</h2>
+  <p>CIFAR-100 gồm 60.000 ảnh màu 32×32 thuộc 100 lớp. Dùng toàn bộ 50.000 ảnh train gốc, tách 450 ảnh/lớp làm train (45.000) và 50 ảnh/lớp làm validation (5.000, seed 42); test là 10.000 ảnh gốc (100 ảnh/lớp). Nhiều cặp lớp giống nhau (các loại cây, nhóm người), nên phân tích lỗi có ý nghĩa. Giấy phép: tập công khai của Krizhevsky (2009); thẻ dataset chính thức trên Hugging Face ghi license là “unknown”, nhóm chỉ dùng cho học tập.</p>
+  <figure><img src="assets/a1/eda_samples.png" alt="Ảnh mẫu mỗi lớp của CIFAR-100" style="max-width:520px"><figcaption>Mỗi lớp một ảnh mẫu (32×32).</figcaption></figure>
+
+  <h2>2. DataLoader và augmentation</h2>
+  <p>Ảnh giữ dạng tensor uint8 trong <code>DataLoader</code> (batch 128). Trên GPU: random crop (đệm 4 pixel) và lật ngang cho tập train; sau đó phóng to bilinear lên 224×224 và chuẩn hóa theo cấu hình pretrained của timm. Mixed precision (fp16).</p>
+
+  <h2>3. Protocol thí nghiệm</h2>
+  <p>8 cấu hình = 2 kiến trúc × 4 chế độ; AdamW, lịch cosine, 15 epoch, seed 42, vòng lặp huấn luyện tự viết. Chọn epoch theo validation accuracy, đo test một lần. Trọng số pretrained: ResNet-18 <code>resnet18.a1_in1k</code> (ImageNet-1k), ViT-Tiny <code>vit_tiny_patch16_224.augreg_in21k_ft_in1k</code> (ImageNet-21k rồi ImageNet-1k).</p>
+
+  <h2>4. Kết quả</h2>
+  <div class="table-wrap"><table>
+    <tr><th>Kiến trúc</th><th>Chế độ</th><th>Trainable</th><th>Val acc</th><th>Test acc</th><th>Macro-F1</th><th>s/epoch</th><th>Bộ nhớ đỉnh (MB)</th></tr>
+<tr><td>ResNet-18</td><td>scratch</td><td>11.227.812</td><td>0,6098</td><td>0,6038</td><td>0,6030</td><td>76,3</td><td>1779</td></tr>
+<tr><td>ResNet-18</td><td>head</td><td>51.300</td><td>0,6290</td><td>0,6233</td><td>0,6206</td><td>24,6</td><td>1135</td></tr>
+<tr><td>ResNet-18</td><td>partial</td><td>10.544.740</td><td>0,7736</td><td>0,7780</td><td>0,7773</td><td>37,3</td><td>1256</td></tr>
+<tr><td>ResNet-18</td><td>full</td><td>11.227.812</td><td>0,7924</td><td>0,7982</td><td>0,7981</td><td>76,6</td><td>1778</td></tr>
+<tr><td>ViT-Tiny/16</td><td>scratch</td><td>5.543.716</td><td>0,3802</td><td>0,3911</td><td>0,3829</td><td>67,6</td><td>2309</td></tr>
+<tr><td>ViT-Tiny/16</td><td>head</td><td>19.300</td><td>0,7668</td><td>0,7675</td><td>0,7673</td><td>24,0</td><td>651</td></tr>
+<tr><td>ViT-Tiny/16</td><td>partial</td><td>2.688.868</td><td>0,8438</td><td>0,8478</td><td>0,8475</td><td>44,9</td><td>1241</td></tr>
+<tr><td>ViT-Tiny/16</td><td>full</td><td>5.543.716</td><td>0,8730</td><td>0,8754</td><td>0,8753</td><td>67,2</td><td>2309</td></tr>
+  </table></div>
+  <figure><img src="assets/a1/accuracy_bar.png" alt="Test accuracy theo chế độ" style="max-width:520px"><figcaption>Test accuracy theo chế độ huấn luyện.</figcaption></figure>
+  <figure><img src="assets/a1/cost_bar.png" alt="Thời gian và bộ nhớ"><figcaption>Thời gian mỗi epoch và bộ nhớ GPU đỉnh.</figcaption></figure>
+  <figure><img src="assets/a1/curves_resnet18.png" alt="Đường cong học ResNet-18"><figcaption>Đường cong học của ResNet-18.</figcaption></figure>
+  <figure><img src="assets/a1/curves_vit_tiny.png" alt="Đường cong học ViT-Tiny"><figcaption>Đường cong học của ViT-Tiny.</figcaption></figure>
+
+  <h2>5. Thảo luận</h2>
+  <ul>
+    <li>Tốt nhất: ViT-Tiny pretrained + fine-tune toàn bộ (test 0,8754); ResNet-18 tốt nhất là full (0,7982).</li>
+    <li>Từ đầu, CNN hơn hẳn Transformer: 0,6038 so với 0,3911. Pretrain tăng khoảng 19 điểm với ResNet-18 và khoảng 48 điểm với ViT-Tiny; cả hai mô hình scratch chưa hội tụ sau 15 epoch.</li>
+    <li>Head-only nhanh hơn khoảng 3 lần và dùng ít bộ nhớ hơn nhưng kém full nhiều (kém 17,5 điểm với ResNet-18, 10,8 điểm với ViT-Tiny); partial chỉ kém full 2,0–2,8 điểm với chi phí thấp hơn.</li>
+    <li>Lỗi tập trung vào các cặp lớp giống nhau: maple_tree/oak_tree, girl/boy/woman/man, bowl/plate, seal/otter.</li>
+    <li>Lưu ý: ViT-Tiny và ResNet-18 pretrained trên dữ liệu khác nhau (ImageNet-21k rồi 1k so với ImageNet-1k) và khác số tham số, nên chênh lệch khi pretrained không quy riêng cho kiến trúc. Mỗi cấu hình chỉ chạy một lần; một lần chạy lặp lại của vit_tiny scratch cho thấy chênh lệch khoảng 2,9 điểm tại epoch 10 dù cùng seed.</li>
+  </ul>
+  <p>Chi tiết xem <a href="https://github.com/tramphanngoc174/co5085-exercises/blob/main/reports/a1_report.pdf">báo cáo PDF</a>.</p>
+</body>
+</html>

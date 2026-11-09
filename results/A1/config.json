@@ -1,0 +1,30 @@
+{
+  "archs": [
+    "resnet18",
+    "vit_tiny"
+  ],
+  "modes": [
+    "scratch",
+    "head",
+    "partial",
+    "full"
+  ],
+  "epochs": 15,
+  "img_size": 224,
+  "batch_size": 128,
+  "train_per_class": 450,
+  "val_per_class": 50,
+  "lr_scratch": 0.001,
+  "lr_ft": 0.0001,
+  "lr_head": 0.001,
+  "wd": 0.01,
+  "seed": 42,
+  "amp": true,
+  "resume": true,
+  "offline": false,
+  "data_root": "data",
+  "out": "results/A1",
+  "device": "cuda",
+  "timm": "1.0.31",
+  "torch": "2.14.1+cu130"
+}
