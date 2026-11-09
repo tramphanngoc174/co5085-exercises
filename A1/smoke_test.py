@@ -37,7 +37,7 @@ for arch in ["resnet18", "vit_tiny"]:
 def fake(n):
     y = torch.randint(0, K, (n,))
     x = (torch.rand(n, 3, 32, 32) * 100).to(torch.uint8)
-    x[torch.arange(n), :, :8, :] = (y * 25).view(n, 1, 1).to(torch.uint8)
+    x[torch.arange(n), :, :8, :] = (y * 25).view(n, 1, 1, 1).to(torch.uint8)
     return x, y
 
 x_tr, y_tr = fake(128); x_va, y_va = fake(64); x_te, y_te = fake(64)
