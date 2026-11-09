@@ -63,6 +63,16 @@ python E3/run_e3.py --dataset fashion_mnist --epochs 10
 ```
 Baseline MLP/CNN được nạp từ checkpoint `results/E1/*/model.pt`. Kết quả nằm trong `results/E3/`.
 
+**A1** (CNN vs Transformer trên CIFAR-100, nhiều chế độ huấn luyện):
+```bash
+pip install timm
+python A1/smoke_test.py                 # kiểm thử bằng dữ liệu giả, không tải pretrained
+python A1/eda.py                        # thống kê dataset + ảnh mẫu
+python A1/run_a1.py                      # mặc định: CIFAR-100 đầy đủ, 224x224, 15 epoch, 2 kiến trúc x 4 chế độ = 8 lần chạy
+                                        # chạy lại cùng lệnh sẽ bỏ qua cấu hình đã xong (an toàn khi Colab bị ngắt)
+```
+Kết quả nằm trong `results/A1/`.
+
 ## Ghi nhận việc sử dụng công cụ AI
 
 Công cụ AI (Claude, Anthropic) được dùng để hỗ trợ: phân tích đề và lập kế hoạch; soạn khung mã nguồn E1 (`common/`, `E1/`), tệp khung README, trang GitHub Pages; soạn bản nháp báo cáo từ số liệu thật do sinh viên cung cấp. Sinh viên chạy thí nghiệm trên Google Colab và chịu trách nhiệm kiểm tra, giải thích mã nguồn và số liệu. *(Sẽ cập nhật ở các mốc E2, E3.)*
