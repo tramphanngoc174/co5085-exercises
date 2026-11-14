@@ -13,6 +13,7 @@
 | E1 – Softmax / MLP / CNN | 02/11/2026 | Đã có kết quả và báo cáo | `submit-e1` |
 | E2 – MSA + tokenization | 02/11/2026 | Đã có kết quả và báo cáo | `submit-e2` |
 | E3 – LSTM / GRU | 09/11/2026 | Đã có kết quả và báo cáo | `submit-e3` |
+| A1.1 – Dataset và protocol | 26/10/2026 | Đã có (`reports/a1_1_dataset_protocol.md`) | `submit-a1-1` |
 | A1.2 – CNN vs Transformer (CIFAR-100) | 09/11/2026 | Đã có kết quả và báo cáo (`reports/a1_report.pdf`) | `submit-a1` |
 
 ## Cấu trúc thư mục
