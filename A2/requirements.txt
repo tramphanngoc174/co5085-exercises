@@ -1,0 +1,7 @@
+# Versions used for the reported results (Google Colab, Python 3.13.16, Tesla T4)
+# torch==2.14.1+cu130  (install the CUDA build that matches your machine)
+timm==1.0.31
+transformers==5.22.1
+matplotlib
+python-docx      # only for A2/build_a2_report.py
+reportlab        # only for A2/build_a2_report.py

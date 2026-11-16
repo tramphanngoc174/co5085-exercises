@@ -15,6 +15,8 @@
 | E3 – LSTM / GRU | 09/11/2026 | Đã có kết quả và báo cáo | `submit-e3` |
 | A1.1 – Dataset và protocol | 26/10/2026 | Đã có (`reports/a1_1_dataset_protocol.md`) | `submit-a1-1` |
 | A1.2 – CNN vs Transformer (CIFAR-100) | 09/11/2026 | Đã có kết quả và báo cáo (`reports/a1_report.pdf`) | `submit-a1` |
+| A2.1 – Chủ đề, paper, kế hoạch | 02/11/2026 | Đã có (`reports/a2_1_chu_de_paper_ke_hoach.md`) | `submit-a2-1` |
+| A2.2 – Phân đoạn ảnh (VOC 2012) + phân tích paper | 16/11/2026 | Đã có kết quả và báo cáo (`reports/a2_report.pdf`) | `submit-a2` |
 
 ## Cấu trúc thư mục
 
@@ -78,3 +80,17 @@ Kết quả nằm trong `results/A1/`.
 ## Ghi nhận việc sử dụng công cụ AI
 
 Công cụ AI (Claude, Anthropic) được dùng để hỗ trợ: phân tích đề và lập kế hoạch; soạn khung mã nguồn E1–E3 và A1 (`common/`, `E1/`, `E2/`, `E3/`, `A1/`), tệp khung README, trang GitHub Pages; soạn bản nháp báo cáo từ số liệu thật do sinh viên cung cấp. Sinh viên chạy thí nghiệm trên Google Colab và chịu trách nhiệm kiểm tra, giải thích mã nguồn và số liệu.
+
+## A2 — Semantic segmentation: U-Net (ResNet-34) vs SegFormer-B0 on Pascal VOC 2012
+Code: `A2/`. Run on Colab (GPU), from repo root:
+```
+pip install -q timm transformers matplotlib
+python A2/smoke_test.py
+python A2/eda.py
+python A2/run_a2.py --all          # 8 runs, resume-able
+python A2/run_a2.py --arch segformer_b0 --mode scratch --lr_scratch 1e-4 --tag lr1e-4   # extra run
+python A2/build_a2_report.py      # reports/a2_report.pdf
+python A2/build_a2_page.py        # docs/a2.html
+python A2/make_figures.py
+```
+Results go to `results/A2/<arch>_<mode>_<loss>/result.json`. Do not commit `data/`.
